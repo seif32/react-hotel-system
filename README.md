@@ -1,3 +1,5 @@
+![Status: In Progress](https://img.shields.io/badge/status-in%20progress-yellow)
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
