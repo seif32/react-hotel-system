@@ -5,14 +5,14 @@ const StyledLogo = styled.div`
 `;
 
 const Img = styled.img`
-  height: 4.6rem;
+  height: ${(props) => props.size || "4.6rem"};
   width: auto;
 `;
 
-function Logo() {
+function Logo({ size }) {
   return (
     <StyledLogo>
-      <Img src="/logo-color.png" alt="Logo" />
+      <Img src="/logo-no-background.png" alt="Logo" size={size} />
     </StyledLogo>
   );
 }
