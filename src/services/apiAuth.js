@@ -58,6 +58,8 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
 
   const fileName = `avatar-${data.user.id}-${Math.random()}`;
 
+  console.log(fileName);
+
   const { error: storageError } = await supabase.storage
     .from("avatars")
     .upload(fileName, avatar);
@@ -65,8 +67,12 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
   if (storageError) throw new Error(storageError.message);
 
   const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
-    avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+    data: {
+      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+    },
   });
+
+  console.log(updatedUser);
 
   if (error2) throw new Error(error2.message);
   return updatedUser;
