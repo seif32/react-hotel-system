@@ -81,7 +81,36 @@ export async function getStaysAfterDate(date) {
 }
 
 // Activity means that there is a check in or a check out today
+// export async function getStaysTodayActivity() {
+//   const today = getToday();
+//   console.log("Today's date:", today);
+
+//   const { data, error } = await supabase
+//     .from("bookings")
+//     .select("*, guests(fullName, nationality, countryFlag)")
+//     .or(
+//       `and(status.eq.unconfirmed,startDate.eq.${getToday()}),and(status.eq.checked-in,endDate.eq.${getToday()})`
+//     )
+//     .order("created_at");
+
+//   if (error) {
+//     console.error(error);
+//     throw new Error("Bookings could not get loaded");
+//   }
+//   return data;
+// }
+
+function getToday1() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day} 00:00:00`;
+}
 export async function getStaysTodayActivity() {
+  const today = getToday1();
+  console.log("Today's date:", today);
+
   const { data, error } = await supabase
     .from("bookings")
     .select("*, guests(fullName, nationality, countryFlag)")
@@ -90,14 +119,12 @@ export async function getStaysTodayActivity() {
     )
     .order("created_at");
 
-  // Equivalent to this. But by querying this, we only download the data we actually need, otherwise we would need ALL bookings ever created
-  // (stay.status === 'unconfirmed' && isToday(new Date(stay.startDate))) ||
-  // (stay.status === 'checked-in' && isToday(new Date(stay.endDate)))
-
   if (error) {
-    console.error(error);
+    console.error("Error fetching data from Supabase:", error);
     throw new Error("Bookings could not get loaded");
   }
+
+  console.log("Data fetched successfully:", data);
   return data;
 }
 
